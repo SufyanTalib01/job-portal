@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('jobs_type_id')->constrained('job_types')->onDelete('cascade');
-            // create table for vancancy , salary , location , description , benefits , responsibilities , requirements , qualifications , keywords , experience 
             $table->integer('vacancy');
             $table->string('salary')->nullable();
             $table->string('location');

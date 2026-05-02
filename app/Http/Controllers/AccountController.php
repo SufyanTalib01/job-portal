@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\JobType;
 use App\Models\User;
+use App\Models\Job;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -182,6 +183,7 @@ class AccountController extends Controller
 
     public function saveJob(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -193,18 +195,41 @@ class AccountController extends Controller
             'benefits' => 'nullable|string',
             'responsibility' => 'nullable|string',
             'qualifications' => 'nullable|string',
-            'experience' => 'required|integer|min:1|max:10',
+            'experience' => 'required|string|in:1,2,3,4,5,6,7,8,9,10,10_plus',
             'keywords' => 'nullable|string',
             'company_name' => 'required|string|max:255',
             'company_location' => 'nullable|string|max:255',
             'company_website' => 'nullable|url|max:255',
         ]);
 
+
+
         if ($validator->passes()) {
             // Save the job to the database
             // ...
+            $job = new Job();
+            $job->title = $request->title;
+            $job->category_id = $request->category_id;
+            $job->job_type_id = $request->job_type_id;
+            $job->vacancy = $request->vacancy;
+            $job->salary = $request->salary;
+            $job->location = $request->location;
+            $job->description = $request->description;
+            $job->benefits = $request->benefits;
+            $job->responsibility = $request->responsibility;
+            $job->qualifications = $request->qualifications;
+            $job->experience = $request->experience;
+            $job->keywords = $request->keywords;
+            $job->company_name = $request->company_name;
+            $job->company_location = $request->company_location;
+            $job->company_website = $request->company_website;
+            $job->save();
+
 
             Session::flash('success', 'Job created successfully.');
+
+
+
 
             return response()->json([
                 'status' => true,
@@ -216,5 +241,10 @@ class AccountController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+    }
+
+    public function myJobs()
+    {
+        return view('front.account.job.my-jobs');
     }
 }

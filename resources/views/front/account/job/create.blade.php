@@ -193,7 +193,7 @@
                 success: function(response) {
 
                     if (response.status == true) {
-                        window.location.href = '{{ route('account.profile') }}';
+                        window.location.href = '{{ route('account.myJobs') }}';
                     }
 
                     if (response.status == false) {
@@ -203,15 +203,15 @@
                                 .addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.name);
+                                .html(errors.title[0]);
                         }
 
-                        if (errors.catergory_id) {
+                        if (errors.category_id) {
                             $('#category_id')
                                 .addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.category_id);
+                                .html(errors.category_id[0]);
                         }
 
                         if (errors.job_type_id) {
@@ -219,80 +219,80 @@
                                 .addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.job_type_id);
+                                .html(errors.job_type_id[0]);
                         }
                         if (errors.vacancy) {
-                            $.('#vacancy').addClass('is-invalid')
+                            $('#vacancy').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.vacancy);
+                                .html(errors.vacancy[0]);
                         }
                         if (errors.salary) {
-                            $.('#salary').addClass('is-invalid')
+                            $('#salary').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.salary);
+                                .html(errors.salary[0]);
                         }
                         if (errors.location) {
-                            $.('#location').addClass('is-invalid')
+                            $('#location').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.location);
+                                .html(errors.location[0]);
                         }
 
                         if (errors.description) {
-                            $.('#description').addClass('is-invalid')
+                            $('#description').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.description);
+                                .html(errors.description[0]);
                         }
                         if (errors.benefits) {
-                            $.('#benefits').addClass('is-invalid')
+                            $('#benefits').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.benefits);
+                                .html(errors.benefits[0]);
                         }
                         if (errors.responsibility) {
-                            $.('#responsibility').addClass('is-invalid')
+                            $('#responsibility').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.responsibility);
+                                .html(errors.responsibility[0]);
                         }
                         if (errors.qualifications) {
-                            $.('#qualifications').addClass('is-invalid')
+                            $('#qualifications').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.qualifications);
+                                .html(errors.qualifications[0]);
                         }
                         if (errors.keywords) {
-                            $.('#keywords').addClass('is-invalid')
+                            $('#keywords').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.keywords);
+                                .html(errors.keywords[0]);
                         }
                         if (errors.experience) {
-                            $.('#experience').addClass('is-invalid')
+                            $('#experience').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.experience);
+                                .html(errors.experience[0]);
                         }
                         if (errors.company_name) {
-                            $.('#company_name').addClass('is-invalid')
+                            $('#company_name').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.company_name);
+                                .html(errors.company_name[0]);
                         }
                         if (errors.company_location) {
-                            $.('#company_location').addClass('is-invalid')
+                            $('#company_location').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.company_location);
+                                .html(errors.company_location[0]);
                         }
                         if (errors.company_website) {
-                            $.('#company_website').addClass('is-invalid')
+                            $('#company_website').addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.company_website);
+                                .html(errors.company_website[0]);
                         }
 
                     }
