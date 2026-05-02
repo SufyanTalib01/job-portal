@@ -17,12 +17,14 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::put('update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
         Route::post('/updateprofilepicture', [AccountController::class, 'updateProfilePicture'])->name('account.updateProfilePicture');
+        Route::get('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
+        Route::post('/save-job', [AccountController::class, 'saveJob'])->name('account.saveJob');
     });
 
     Route::group(['middleware' => 'oldUserAuth'], function () {
-        Route::get('process-registration', [AccountController::class, 'processRegistration'])->name('account.processRegistration');
         Route::get('/login', [AccountController::class, 'login'])->name('account.login');
         Route::post('/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
         Route::get('/register', [AccountController::class, 'register'])->name('account.register');
+        Route::post('process-registration', [AccountController::class, 'processRegistration'])->name('account.processRegistration');
     });
 });

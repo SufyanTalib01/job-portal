@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\JobType;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use PhpParser\Builder\Function_;
+use PhpParser\Node\Expr\FuncCall;
 
 class AccountController extends Controller
 {
@@ -156,6 +160,51 @@ class AccountController extends Controller
 
 
             Session::flash('success', 'Profile picture updated successfully.');
+
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+    public function createJob()
+    {
+        $data['categories'] = Category::where('status', 1)->get();
+        $data['jobTypes'] = JobType::where('status', 1)->get();
+        return view('front.account.job.create', $data);
+    }
+
+    public function saveJob(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'job_type_id' => 'required|exists:jobs_types,id',
+            'vacancy' => 'required|integer|min:1',
+            'salary' => 'nullable|string|max:255',
+            'location' => 'required|string|max:255',
+            'description' => 'required|string',
+            'benefits' => 'nullable|string',
+            'responsibility' => 'nullable|string',
+            'qualifications' => 'nullable|string',
+            'experience' => 'required|integer|min:1|max:10',
+            'keywords' => 'nullable|string',
+            'company_name' => 'required|string|max:255',
+            'company_location' => 'nullable|string|max:255',
+            'company_website' => 'nullable|url|max:255',
+        ]);
+
+        if ($validator->passes()) {
+            // Save the job to the database
+            // ...
+
+            Session::flash('success', 'Job created successfully.');
 
             return response()->json([
                 'status' => true,
