@@ -16,6 +16,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::put('update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
+        Route::post('/updateprofilepicture', [AccountController::class, 'updateProfilePicture'])->name('account.updateProfilePicture');
     });
 
     Route::group(['middleware' => 'oldUserAuth'], function () {

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class AccountController extends Controller
 {
@@ -110,6 +113,55 @@ class AccountController extends Controller
             ]);
         } else {
 
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+    public function updateProfilePicture(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->passes()) {
+
+            $id = Auth::user()->id;
+            $user = User::find($id);
+
+            File::delete(public_path('profile-pictures/' . $user->image));
+            File::delete(public_path('profile-pictures/thumb/' . $user->image));
+
+
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = $id . '-' . time() . '.' . $ext;
+            $image->move(public_path('profile-pictures/'), $imageName);
+
+
+            $user->image = $imageName;
+            $user->save();
+
+            // create new image instance (800 x 600)
+            $sourcePath = public_path('profile-pictures/' . $imageName);
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->read($sourcePath);
+
+
+            // crop the best fitting 5:3 (600x360) ratio and resize to 600x360 pixel
+            $image->cover(150, 150);
+            $image->toPng()->save(public_path('profile-pictures/thumb/' . $imageName));
+
+
+            Session::flash('success', 'Profile picture updated successfully.');
+
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()

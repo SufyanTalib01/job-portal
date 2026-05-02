@@ -58,10 +58,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="{{ route('account.updateProfile') }}" id="updateProfilePicture"
+                        name="updateProfilePicture" method="post">
+                        @csrf
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Profile Image</label>
                             <input type="file" class="form-control" id="image" name="image">
+                            <p class="text-danger" id="image-error"></p>
                         </div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary mx-3">Update</button>
@@ -91,6 +94,37 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+    </script>
+
+    <script>
+        $('#updateProfilePicture').submit(function(e) {
+            e.preventDefault();
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '{{ route('account.updateProfilePicture') }}',
+                type: 'post',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+
+                success: function(response) {
+                    if (response.status == true) {
+                        window.location.href = '{{ route('account.profile') }}';
+                    }
+
+                    if (response.status == false) {
+                        var errors = response.errors;
+
+                        if (errors.image) {
+                            $('#image-error').html(errors.image);
+                        }
+                    }
+                }
+            })
+        })
     </script>
 
     @yield('customJs')
