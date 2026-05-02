@@ -11,7 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('jobs_types', 'job_types');
+        // Only rename if jobs_types table exists (for older databases)
+        if (Schema::hasTable('jobs_types')) {
+            Schema::rename('jobs_types', 'job_types');
+        }
     }
 
     /**
@@ -19,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('job_types', function (Blueprint $table) {
-            //
-        });
+        // Only rename back if job_types exists and jobs_types doesn't
+        if (Schema::hasTable('job_types') && !Schema::hasTable('jobs_types')) {
+            Schema::rename('job_types', 'jobs_types');
+        }
     }
 };

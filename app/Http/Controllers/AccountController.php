@@ -16,6 +16,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 use PhpParser\Builder\Function_;
 use PhpParser\Node\Expr\FuncCall;
+use Psy\Readline\Hoa\Console;
 
 class AccountController extends Controller
 {
@@ -176,6 +177,7 @@ class AccountController extends Controller
 
     public function createJob()
     {
+
         $data['categories'] = Category::where('status', 1)->get();
         $data['jobTypes'] = JobType::where('status', 1)->get();
         return view('front.account.job.create', $data);
@@ -187,7 +189,7 @@ class AccountController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'job_type_id' => 'required|exists:jobs_types,id',
+            'job_type_id' => 'required|exists:job_types,id',
             'vacancy' => 'required|integer|min:1',
             'salary' => 'nullable|string|max:255',
             'location' => 'required|string|max:255',
@@ -199,7 +201,7 @@ class AccountController extends Controller
             'keywords' => 'nullable|string',
             'company_name' => 'required|string|max:255',
             'company_location' => 'nullable|string|max:255',
-            'company_website' => 'nullable|url|max:255',
+            'company_website' => 'nullable|max:255',
         ]);
 
 
@@ -209,8 +211,9 @@ class AccountController extends Controller
             // ...
             $job = new Job();
             $job->title = $request->title;
+            $job->user_id = Auth::id();
             $job->category_id = $request->category_id;
-            $job->job_type_id = $request->job_type_id;
+            $job->jobs_type_id = $request->job_type_id;
             $job->vacancy = $request->vacancy;
             $job->salary = $request->salary;
             $job->location = $request->location;
@@ -245,6 +248,8 @@ class AccountController extends Controller
 
     public function myJobs()
     {
-        return view('front.account.job.my-jobs');
+        $id = Auth::user()->id;
+        $data['jobs'] = Job::with('category', 'jobType')->where('user_id', $id)->paginate(10);
+        return view('front.account.job.my-jobs', $data);
     }
 }

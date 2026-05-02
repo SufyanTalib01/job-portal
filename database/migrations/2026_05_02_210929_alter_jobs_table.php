@@ -12,11 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->integer('status')->default(1)->after('company_name');
-            $table->integer('is_featured')->default(0)->after('status');
-            $table->foreignId('jobs_type_id')
-                ->constrained('job_types')
-                ->onDelete('cascade');
+            if (!Schema::hasColumn('jobs', 'user_id')) {
+                $table->foreignId('user_id')->after('title')->constrained()->onDelete('cascade');
+            }
         });
     }
 
@@ -26,8 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('jobs_type_id');
-            $table->dropColumn(['status', 'is_featured']);
+            $table->dropConstrainedForeignId('user_id');
         });
     }
 };

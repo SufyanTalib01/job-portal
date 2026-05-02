@@ -7,7 +7,8 @@ use App\Models\JobType;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use PHPUnit\Util\PHP\Job;
+use App\Models\Job;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,7 +21,8 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        \App\Models\Category::factory(5)->create();
-        \App\Models\JobType::factory(5)->create();
+        // \App\Models\Category::factory(5)->create();
+        // \App\Models\JobType::factory(5)->create();
+        \App\Models\Job::factory(20)->create();
     }
 }
