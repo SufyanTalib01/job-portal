@@ -71,9 +71,17 @@
                                                                     href="{{ route('account.editJob', $job->id) }}"><i
                                                                         class="fa fa-edit" aria-hidden="true"></i> Edit</a>
                                                             </li>
-                                                            <li><a class="dropdown-item" href="#"><i
-                                                                        class="fa fa-trash" aria-hidden="true"></i>
-                                                                    Remove</a></li>
+                                                            <li>
+                                                                <form action="{{ route('account.deleteJob', $job->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="dropdown-item"
+                                                                        onclick="return confirm('Are you sure want to delete?')">
+                                                                        <i class="fa fa-trash"></i> Delete
+                                                                    </button>
+                                                                </form>
+
                                                         </ul>
                                                     </div>
                                                 </td>

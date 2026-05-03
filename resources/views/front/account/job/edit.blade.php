@@ -216,8 +216,8 @@
             $('.text-danger').html('');
 
             $.ajax({
-                url: '{{ route('account.saveJob') }}',
-                type: 'post',
+                url: '{{ route('account.updateJob', $job->id) }}',
+                type: 'put',
                 data: $('#userForm').serialize(),
                 dataType: 'json',
 

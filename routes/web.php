@@ -22,6 +22,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/my-jobs', [AccountController::class, 'myJobs'])->name('account.myJobs');
         Route::get('/edit-job/{id}', [AccountController::class, 'editJob'])->name('account.editJob');
         Route::put('/update-job/{id}', [AccountController::class, 'updateJob'])->name('account.updateJob');
+        Route::delete('/delete-job/{id}', [AccountController::class, 'deleteJob'])->name('account.deleteJob');
     });
 
     Route::group(['middleware' => 'oldUserAuth'], function () {

@@ -249,7 +249,7 @@ class AccountController extends Controller
     public function myJobs()
     {
         $id = Auth::user()->id;
-        $data['jobs'] = Job::with('category', 'jobType')->where('user_id', $id)->latest()->paginate(10);
+        $data['jobs'] = Job::with('category', 'jobType')->where('user_id', $id)->orderBy('created_at', 'asc')->paginate(10);
         return view('front.account.job.my-jobs', $data);
     }
 
@@ -313,5 +313,17 @@ class AccountController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+    }
+
+    public function deleteJob($id)
+    {
+        $job = Job::where('id', $id)
+            ->where('user_id', Auth::user()->id)
+            ->firstOrFail();
+
+        $job->delete();
+
+        return redirect()->route('account.myJobs')
+            ->with('success', 'Job deleted successfully.');
     }
 }
