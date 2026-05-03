@@ -249,7 +249,69 @@ class AccountController extends Controller
     public function myJobs()
     {
         $id = Auth::user()->id;
-        $data['jobs'] = Job::with('category', 'jobType')->where('user_id', $id)->paginate(10);
+        $data['jobs'] = Job::with('category', 'jobType')->where('user_id', $id)->latest()->paginate(10);
         return view('front.account.job.my-jobs', $data);
+    }
+
+    public function editjob(Request $request, $id)
+    {
+        $data['job'] = Job::with('category', 'jobType')->where('id', $id)->first();
+        $data['categories'] = Category::where('status', 1)->get();
+        $data['jobTypes'] = JobType::where('status', 1)->get();
+        return view('front.account.job.edit', $data);
+    }
+
+    public function updateJob(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'job_type_id' => 'required|exists:job_types,id',
+            'vacancy' => 'required|integer|min:1',
+            'salary' => 'nullable|string|max:255',
+            'location' => 'required|string|max:255',
+            'description' => 'required|string',
+            'benefits' => 'nullable|string',
+            'responsibility' => 'nullable|string',
+            'qualifications' => 'nullable|string',
+            'experience' => 'required|string|in:1,2,3,4,5,6,7,8,9,10,10_plus',
+            'keywords' => 'nullable|string',
+            'company_name' => 'required|string|max:255',
+            'company_location' => 'nullable|string|max:255',
+            'company_website' => 'nullable|max:255',
+        ]);
+
+        if ($validator->passes()) {
+            // Update the job in the database
+            $job = Job::findOrFail($id);
+            $job->title = $request->title;
+            $job->category_id = $request->category_id;
+            $job->jobs_type_id = $request->job_type_id;
+            $job->vacancy = $request->vacancy;
+            $job->salary = $request->salary;
+            $job->location = $request->location;
+            $job->description = $request->description;
+            $job->benefits = $request->benefits;
+            $job->responsibility = $request->responsibility;
+            $job->qualifications = $request->qualifications;
+            $job->experience = $request->experience;
+            $job->keywords = $request->keywords;
+            $job->company_name = $request->company_name;
+            $job->company_location = $request->company_location;
+            $job->company_website = $request->company_website;
+            $job->save();
+
+            Session::flash('success', 'Job updated successfully.');
+
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
 }
