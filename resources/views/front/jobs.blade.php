@@ -161,7 +161,7 @@
                                                                 </div>
 
                                                                 <div class="d-grid mt-3">
-                                                                    <a href="job-detail.html"
+                                                                    <a href="{{ route('jobDetails', $job->id) }}"
                                                                         class="btn btn-primary btn-lg">Details</a>
                                                                 </div>
 

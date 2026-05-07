@@ -55,4 +55,10 @@ class JobController extends Controller
 
         return view('front.jobs', $data);
     }
+
+    public function jobDetails($id)
+    {
+        $data['jobDetail'] = Job::with('category', 'jobType')->where('id', $id)->first();
+        return view('front.job-details', $data);
+    }
 }

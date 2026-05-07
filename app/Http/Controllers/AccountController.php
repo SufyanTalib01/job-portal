@@ -326,4 +326,9 @@ class AccountController extends Controller
         return redirect()->route('account.myJobs')
             ->with('success', 'Job deleted successfully.');
     }
+
+    public function applyJob(Request $request)
+    {
+        dd($request->id);
+    }
 }

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
+Route::get('/job/details/{id}', [JobController::class, 'jobDetails'])->name('jobDetails');
+
 
 
 Route::group(['prefix' => 'account'], function () {
@@ -24,6 +26,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/edit-job/{id}', [AccountController::class, 'editJob'])->name('account.editJob');
         Route::put('/update-job/{id}', [AccountController::class, 'updateJob'])->name('account.updateJob');
         Route::delete('/delete-job/{id}', [AccountController::class, 'deleteJob'])->name('account.deleteJob');
+        Route::post('/apply-job', [AccountController::class, 'applyJob'])->name('account.applyJob');
     });
 
     Route::group(['middleware' => 'oldUserAuth'], function () {
