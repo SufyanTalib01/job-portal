@@ -76,7 +76,7 @@
                                 <div class="pt-3 text-end">
                                     <a href="#" class="btn btn-secondary">Save</a>
                                     @if (Auth::check())
-                                        <a href="" onclick="applyJob({{ $jobDetail->id }})"
+                                        <a href="#" onclick="event.preventDefault(); applyJob({{ $jobDetail->id }})"
                                             class="btn btn-primary">Apply</a>
                                     @else
                                         <a href="#" onclick="event.preventDefault()"
@@ -133,12 +133,28 @@
                 $.ajax({
                     url: '{{ route('account.applyJob') }}',
                     type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
                     data: {
                         id: id
                     },
                     dataType: 'json',
-                    success: function(response) {},
-
+                    success: function(response) {
+                        if (response.status) {
+                            alert(response.message);
+                            location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = 'An error occurred';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        alert(errorMessage);
+                    }
                 });
             }
         }

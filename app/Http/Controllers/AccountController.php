@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\JobType;
 use App\Models\User;
 use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -329,6 +330,61 @@ class AccountController extends Controller
 
     public function applyJob(Request $request)
     {
-        dd($request->id);
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:jobs,id',
+        ]);
+
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid job ID'
+            ]);
+        }
+
+        $job = Job::find($request->id);
+        $userId = Auth::id();
+
+        // Check if the user is the job poster
+        if ($job->user_id == $userId) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You cannot apply for your own job posting.'
+            ]);
+        }
+
+        // Check if user has already applied
+        $existingApplication = JobApplication::where('job_id', $job->id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existingApplication) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You have already applied for this job.'
+            ]);
+        }
+
+        // Create new application
+        try {
+            JobApplication::create([
+                'job_id' => $job->id,
+                'user_id' => $userId,
+                'employer_id' => $job->user_id,
+                'applied_at' => now(),
+            ]);
+
+            Session::flash('success', 'Application submitted successfully!');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Application submitted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred while submitting your application. Please try again.'
+            ]);
+        }
     }
 }

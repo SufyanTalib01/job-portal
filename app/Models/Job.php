@@ -19,4 +19,14 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class, 'jobs_type_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }
