@@ -370,12 +370,12 @@ class AccountController extends Controller
 
         // Create new application
         try {
-            JobApplication::create([
-                'job_id' => $job->id,
-                'user_id' => $userId,
-                'employer_id' => $job->user_id,
-                'applied_at' => now(),
-            ]);
+            // JobApplication::create([
+            //     'job_id' => $job->id,
+            //     'user_id' => $userId,
+            //     'employer_id' => $job->user_id,
+            //     'applied_at' => now(),
+            // ]);
 
             $employer = User::find($employer_id);
             $mailData = [
