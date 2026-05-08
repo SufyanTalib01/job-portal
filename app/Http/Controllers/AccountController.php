@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\JobNotificationEmail;
 use App\Models\Category;
 use App\Models\JobType;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -343,6 +345,7 @@ class AccountController extends Controller
         }
 
         $job = Job::find($request->id);
+        $employer_id = User::find($job->user_id);
         $userId = Auth::id();
 
         // Check if the user is the job poster
@@ -373,6 +376,14 @@ class AccountController extends Controller
                 'employer_id' => $job->user_id,
                 'applied_at' => now(),
             ]);
+
+            $employer = User::find($employer_id);
+            $mailData = [
+                'employer' => $employer,
+                'user' => Auth::user(),
+                'job' => $job,
+            ];
+            Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
 
             Session::flash('success', 'Application submitted successfully!');
 

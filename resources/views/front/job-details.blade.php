@@ -15,7 +15,12 @@
                 </div>
             </div>
         </div>
+
+
         <div class="container job_details_area">
+
+            @include('front.message')
+
             @if (!empty($jobDetail))
                 <div class="row pb-5">
                     <div class="col-md-8">
@@ -76,8 +81,15 @@
                                 <div class="pt-3 text-end">
                                     <a href="#" class="btn btn-secondary">Save</a>
                                     @if (Auth::check())
-                                        <a href="#" onclick="event.preventDefault(); applyJob({{ $jobDetail->id }})"
-                                            class="btn btn-primary">Apply</a>
+                                        @if ($hasApplied)
+                                            <button class="btn btn-success" disabled>
+                                                <i class="fa fa-check"></i> Applied
+                                            </button>
+                                        @else
+                                            <a href="#"
+                                                onclick="event.preventDefault(); applyJob({{ $jobDetail->id }})"
+                                                class="btn btn-primary">Apply</a>
+                                        @endif
                                     @else
                                         <a href="#" onclick="event.preventDefault()"
                                             class="btn btn-primary disable">Login

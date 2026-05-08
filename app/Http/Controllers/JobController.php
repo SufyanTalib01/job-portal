@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobType;
+use App\Models\JobApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Psy\Readline\Hoa\Console;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -59,6 +61,16 @@ class JobController extends Controller
     public function jobDetails($id)
     {
         $data['jobDetail'] = Job::with('category', 'jobType')->where('id', $id)->first();
+
+        // Check if user has already applied
+        $data['hasApplied'] = false;
+        if (Auth::check()) {
+            $hasApplied = JobApplication::where('job_id', $id)
+                ->where('user_id', Auth::id())
+                ->exists();
+            $data['hasApplied'] = $hasApplied;
+        }
+
         return view('front.job-details', $data);
     }
 }
