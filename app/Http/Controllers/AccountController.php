@@ -253,7 +253,7 @@ class AccountController extends Controller
     public function myJobs()
     {
         $id = Auth::user()->id;
-        $data['jobs'] = Job::with('category', 'jobType')->where('user_id', $id)->orderBy('created_at', 'desc')->paginate(10);
+        $data['jobs'] = Job::with('category', 'jobType', 'applications')->where('user_id', $id)->orderBy('created_at', 'desc')->paginate(10);
         return view('front.account.job.my-jobs', $data);
     }
 
@@ -475,5 +475,29 @@ class AccountController extends Controller
                 'message' => 'An error occurred while saving the job. Please try again.'
             ]);
         }
+    }
+
+    public function mySavedJobs()
+    {
+        $userId = Auth::id();
+
+        $data['savedjobs'] = SavedJob::with('job', 'job.jobType', 'job.applications', 'job.category')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('front.account.job.my-saved-jobs', $data);
+    }
+
+    public function savedjobdelete($id)
+    {
+        $savedJob = SavedJob::where('id', $id)
+            ->where('user_id', Auth::user()->id)
+            ->firstOrFail();
+
+        $savedJob->delete();
+
+        return redirect()->route('account.mySavedJobs')
+            ->with('success', 'Saved job deleted successfully.');
     }
 }

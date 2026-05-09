@@ -45,8 +45,9 @@
                                     </div>
                                     <div class="jobs_right">
                                         <div class="apply_now">
-                                            <a class="heart_mark" href="javascript:void(0)"
-                                                onclick="savedjob({{ $jobDetail->id }})"> <i class="fa fa-heart-o"
+                                            <a class="heart_mark {{ Auth::check() && $hasSaved ? 'saved-job' : '' }}"
+                                                href="javascript:void(0)" onclick="savedjob({{ $jobDetail->id }})"> <i
+                                                    class="fa fa-heart{{ Auth::check() && $hasSaved ? '' : '-o' }}"
                                                     aria-hidden="true"></i></a>
                                         </div>
                                     </div>
@@ -115,6 +116,49 @@
                                 </div>
                             </div>
                         </div>
+                        @if (Auth::check() && Auth::user()->id == $jobDetail->user_id)
+                            <div class="card shadow border-0 mt-4">
+                                <div class="job_details_header">
+                                    <div class="single_jobs white-bg d-flex justify-content-between">
+                                        <div class="jobs_left d-flex align-items-center">
+                                            <div class="jobs_conetent">
+                                                <h4>Applications</h4>
+
+                                            </div>
+                                        </div>
+                                        <div class="jobs_right">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="descript_wrap white-bg">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Mobile</th>
+                                            <th>Applied At</th>
+                                        </tr>
+                                        @if ($applications->isNotEmpty())
+                                            @foreach ($applications as $application)
+                                                <tr>
+                                                    <td>{{ $application->user->name ?? 'N/A' }}</td>
+                                                    <td>{{ $application->user->email ?? 'N/A' }}</td>
+                                                    <td>{{ $application->user->mobile ?? 'N/A' }}</td>
+                                                    <td>{{ $application->applied_at->format('d M Y H:i') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="3" class="text-center">No applications found.</td>
+                                            </tr>
+                                        @endif
+                                    </table>
+                                    <div class="pt-3 text-end">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="col-md-4">
                         <div class="card shadow border-0">
@@ -150,6 +194,7 @@
                     </div>
                 </div>
             @endif
+
         </div>
     </section>
 @endsection

@@ -81,6 +81,9 @@ class JobController extends Controller
             $data['hasSaved'] = $hasSaved;
         }
 
+        // fetch application 
+        $data['applications'] = JobApplication::where('job_id', $id)->with('user')->get();
+
         return view('front.job-details', $data);
     }
 }

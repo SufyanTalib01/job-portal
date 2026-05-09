@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class SavedJob extends Model
 {
     protected $fillable = ['job_id', 'user_id'];
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class, 'job_id');
+    }
 }
