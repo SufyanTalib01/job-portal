@@ -1,5 +1,6 @@
 @extends('front.layouts.app')
 {{-- S  --}}
+{{-- S  --}}
 @section('main')
     <section class="section-5 bg-2">
         <div class="container py-5">
