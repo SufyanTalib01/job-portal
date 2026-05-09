@@ -8,6 +8,7 @@ use App\Models\JobType;
 use App\Models\User;
 use App\Models\Job;
 use App\Models\JobApplication;
+use App\Models\SavedJob;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -424,5 +425,55 @@ class AccountController extends Controller
 
         return redirect()->route('account.myJobApplications')
             ->with('success', 'Job application deleted successfully.');
+    }
+
+    public function savedJob(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:jobs,id',
+        ]);
+
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid job ID'
+            ]);
+        }
+
+        $job = Job::find($request->id);
+        $userId = Auth::id();
+
+        // Check if user has already saved the job
+        $existingSavedJob = SavedJob::where('job_id', $job->id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existingSavedJob) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You have already saved this job.'
+            ]);
+        }
+
+        // Create new saved job
+        try {
+            SavedJob::create([
+                'job_id' => $job->id,
+                'user_id' => $userId,
+            ]);
+
+            Session::flash('success', 'Job saved successfully!');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Job saved successfully!'
+            ]);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred while saving the job. Please try again.'
+            ]);
+        }
     }
 }

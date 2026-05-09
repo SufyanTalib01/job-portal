@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobType;
 use App\Models\JobApplication;
+use App\Models\SavedJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Psy\Readline\Hoa\Console;
@@ -69,6 +70,15 @@ class JobController extends Controller
                 ->where('user_id', Auth::id())
                 ->exists();
             $data['hasApplied'] = $hasApplied;
+        }
+
+        // Check if user has already saved the job
+        $data['hasSaved'] = false;
+        if (Auth::check()) {
+            $hasSaved = SavedJob::where('job_id', $id)
+                ->where('user_id', Auth::id())
+                ->exists();
+            $data['hasSaved'] = $hasSaved;
         }
 
         return view('front.job-details', $data);

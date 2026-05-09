@@ -42,79 +42,90 @@
                         <div class="row pt-5">
                             <div class="col-md-4 col-lg-3 sidebar mb-4">
 
-                                <div class="card border-0 shadow p-4">
-                                    <div class="mb-4">
-                                        <h2>Keywords</h2>
-                                        <input type="text" name="keywords" placeholder="Keywords" class="form-control"
-                                            value="{{ request('keywords') }}">
-                                    </div>
+                                <form action="{{ route('jobs') }}" method="GET">
+                                    <div class="card border-0 shadow p-4">
+                                        <div class="mb-4">
+                                            <h2>Keywords</h2>
+                                            <input type="text" name="keywords" placeholder="Keywords"
+                                                class="form-control" value="{{ request('keywords') }}">
+                                        </div>
 
-                                    <div class="mb-4">
-                                        <h2>Location</h2>
-                                        <input type="text" name="location" placeholder="Location" class="form-control"
-                                            value="{{ request('location') }}">
-                                    </div>
+                                        <div class="mb-4">
+                                            <h2>Location</h2>
+                                            <input type="text" name="location" placeholder="Location"
+                                                class="form-control" value="{{ request('location') }}">
+                                        </div>
 
-                                    <div class="mb-4">
-                                        <h2>Category</h2>
-                                        <select name="category" id="category" class="form-control">
-                                            <option value="">Select a Category</option>
-                                            @foreach ($categories as $category)
-                                                <option {{ request('category') == $category->id ? 'selected' : '' }}
-                                                    value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <div class="mb-4">
+                                            <h2>Category</h2>
+                                            <select name="category" id="category" class="form-control">
+                                                <option value="">Select a Category</option>
+                                                @foreach ($categories as $category)
+                                                    <option {{ request('category') == $category->id ? 'selected' : '' }}
+                                                        value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+
+
+                                        <div class="mb-4">
+                                            <h2>Job Type</h2>
+                                            @foreach ($jobsTypes as $jobType)
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input " name="jobs_type[]" type="checkbox"
+                                                        value="{{ $jobType->id }}" id="{{ $jobType->id }}"
+                                                        {{ in_array($jobType->id, request('jobs_type', [])) ? 'checked' : '' }}>
+                                                    <label class="form-check-label "
+                                                        for="{{ $jobType->id }}">{{ $jobType->name }}</label>
+                                                </div>
                                             @endforeach
-                                        </select>
-                                    </div>
+                                        </div>
 
-
-
-                                    <div class="mb-4">
-                                        <h2>Job Type</h2>
-                                        @foreach ($jobsTypes as $jobType)
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input " name="jobs_type[]" type="checkbox"
-                                                    value="{{ $jobType->id }}" id="{{ $jobType->id }}"
-                                                    {{ in_array($jobType->id, request('jobs_type', [])) ? 'checked' : '' }}>
-                                                <label class="form-check-label "
-                                                    for="{{ $jobType->id }}">{{ $jobType->name }}</label>
-                                            </div>
-                                        @endforeach
+                                        <div class="mb-4">
+                                            <h2>Experience</h2>
+                                            <select name="experience" id="experience" class="form-control">
+                                                <option value="">Select Experience</option>
+                                                <option {{ request('experience') == '1' ? 'selected' : '' }}
+                                                    value="1">
+                                                    1 Year</option>
+                                                <option {{ request('experience') == '2' ? 'selected' : '' }}
+                                                    value="2">2
+                                                    Years</option>
+                                                <option {{ request('experience') == '3' ? 'selected' : '' }}
+                                                    value="3">3
+                                                    Years</option>
+                                                <option {{ request('experience') == '4' ? 'selected' : '' }}
+                                                    value="4">4
+                                                    Years</option>
+                                                <option {{ request('experience') == '5' ? 'selected' : '' }}
+                                                    value="5">5
+                                                    Years</option>
+                                                <option {{ request('experience') == '6' ? 'selected' : '' }}
+                                                    value="6">6
+                                                    Years</option>
+                                                <option {{ request('experience') == '7' ? 'selected' : '' }}
+                                                    value="7">7
+                                                    Years</option>
+                                                <option {{ request('experience') == '8' ? 'selected' : '' }}
+                                                    value="8">8
+                                                    Years</option>
+                                                <option {{ request('experience') == '9' ? 'selected' : '' }}
+                                                    value="9">9
+                                                    Years</option>
+                                                <option {{ request('experience') == '10' ? 'selected' : '' }}
+                                                    value="10">10
+                                                    Years</option>
+                                                <option {{ request('experience') == '10_plus' ? 'selected' : '' }}
+                                                    value="10_plus">10+ Years</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-grid mt-3">
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                Filter Jobs
+                                            </button>
+                                        </div>
                                     </div>
-
-                                    <div class="mb-4">
-                                        <h2>Experience</h2>
-                                        <select name="experience" id="experience" class="form-control">
-                                            <option value="">Select Experience</option>
-                                            <option {{ request('experience') == '1' ? 'selected' : '' }} value="1">
-                                                1 Year</option>
-                                            <option {{ request('experience') == '2' ? 'selected' : '' }} value="2">2
-                                                Years</option>
-                                            <option {{ request('experience') == '3' ? 'selected' : '' }} value="3">3
-                                                Years</option>
-                                            <option {{ request('experience') == '4' ? 'selected' : '' }} value="4">4
-                                                Years</option>
-                                            <option {{ request('experience') == '5' ? 'selected' : '' }} value="5">5
-                                                Years</option>
-                                            <option {{ request('experience') == '6' ? 'selected' : '' }} value="6">6
-                                                Years</option>
-                                            <option {{ request('experience') == '7' ? 'selected' : '' }} value="7">7
-                                                Years</option>
-                                            <option {{ request('experience') == '8' ? 'selected' : '' }} value="8">8
-                                                Years</option>
-                                            <option {{ request('experience') == '9' ? 'selected' : '' }} value="9">9
-                                                Years</option>
-                                            <option {{ request('experience') == '10' ? 'selected' : '' }} value="10">10
-                                                Years</option>
-                                            <option {{ request('experience') == '10_plus' ? 'selected' : '' }}
-                                                value="10_plus">10+ Years</option>
-                                        </select>
-                                    </div>
-                                    <div class="d-grid mt-3">
-                                        <button type="submit" class="btn btn-primary btn-lg">
-                                            Filter Jobs
-                                        </button>
-                                    </div>
-                                </div>
                                 </form>
                             </div>
                             <div class="col-md-8 col-lg-9 ">

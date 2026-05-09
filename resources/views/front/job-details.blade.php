@@ -45,7 +45,8 @@
                                     </div>
                                     <div class="jobs_right">
                                         <div class="apply_now">
-                                            <a class="heart_mark" href="#"> <i class="fa fa-heart-o"
+                                            <a class="heart_mark" href="javascript:void(0)"
+                                                onclick="savedjob({{ $jobDetail->id }})"> <i class="fa fa-heart-o"
                                                     aria-hidden="true"></i></a>
                                         </div>
                                     </div>
@@ -79,7 +80,22 @@
                                 @endif
                                 <div class="border-bottom"></div>
                                 <div class="pt-3 text-end">
-                                    <a href="#" class="btn btn-secondary">Save</a>
+                                    @if (Auth::check())
+                                        @if ($hasSaved)
+                                            <button class="btn btn-success" disabled>
+                                                <i class="fa fa-check"></i> Saved
+                                            </button>
+                                        @else
+                                            <a href="#"
+                                                onclick="event.preventDefault(); savedjob({{ $jobDetail->id }})"
+                                                class="btn btn-primary">Save</a>
+                                        @endif
+                                    @else
+                                        <a href="#" onclick="event.preventDefault()"
+                                            class="btn btn-primary disable">Login
+                                            to Save</a>
+                                    @endif
+
                                     @if (Auth::check())
                                         @if ($hasApplied)
                                             <button class="btn btn-success" disabled>
@@ -144,6 +160,39 @@
             if (confirm('Are you sure you want to apply for this job?')) {
                 $.ajax({
                     url: '{{ route('account.applyJob') }}',
+                    type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status) {
+                            alert(response.message);
+                            location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = 'An error occurred';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        alert(errorMessage);
+                    }
+                });
+            }
+        }
+
+
+        // saved job 
+        function savedjob(id) {
+            if (confirm('Are you sure you want to save this job?')) {
+                $.ajax({
+                    url: '{{ route('account.savedJob') }}',
                     type: 'post',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
