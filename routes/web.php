@@ -27,6 +27,8 @@ Route::group(['prefix' => 'account'], function () {
         Route::put('/update-job/{id}', [AccountController::class, 'updateJob'])->name('account.updateJob');
         Route::delete('/delete-job/{id}', [AccountController::class, 'deleteJob'])->name('account.deleteJob');
         Route::post('/apply-job', [AccountController::class, 'applyJob'])->name('account.applyJob');
+        Route::get('/my-job-applications', [AccountController::class, 'myJobApplications'])->name('account.myJobApplications');
+        Route::delete('/job-applied-delete/{id}', [AccountController::class, 'AppliedJobdelete'])->name('account.AppliedJobdelete');
     });
 
     Route::group(['middleware' => 'oldUserAuth'], function () {

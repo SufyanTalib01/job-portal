@@ -345,7 +345,6 @@ class AccountController extends Controller
         }
 
         $job = Job::find($request->id);
-        $employer_id = User::find($job->user_id);
         $userId = Auth::id();
 
         // Check if the user is the job poster
@@ -370,19 +369,22 @@ class AccountController extends Controller
 
         // Create new application
         try {
-            // JobApplication::create([
-            //     'job_id' => $job->id,
-            //     'user_id' => $userId,
-            //     'employer_id' => $job->user_id,
-            //     'applied_at' => now(),
-            // ]);
+            JobApplication::create([
+                'job_id' => $job->id,
+                'user_id' => $userId,
+                'employer_id' => $job->user_id,
+                'applied_at' => now(),
+            ]);
 
-            $employer = User::find($employer_id);
+
+
+            $employer = User::where('id', $job->user_id)->first();
             $mailData = [
                 'employer' => $employer,
                 'user' => Auth::user(),
                 'job' => $job,
             ];
+
             Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
 
             Session::flash('success', 'Application submitted successfully!');
@@ -392,10 +394,35 @@ class AccountController extends Controller
                 'message' => 'Application submitted successfully!'
             ]);
         } catch (\Exception $e) {
+
             return response()->json([
                 'status' => false,
                 'message' => 'An error occurred while submitting your application. Please try again.'
             ]);
         }
+    }
+
+    public function myJobApplications()
+    {
+        $userId = Auth::id();
+
+        $data['jobsapplieds'] = JobApplication::with('job', 'job.jobType', 'job.applications',  'employer')
+            ->where('user_id', $userId)
+            ->orderBy('applied_at', 'desc')
+            ->paginate(10);
+
+        return view('front.account.job.my-job-applications', $data);
+    }
+
+    public function AppliedJobdelete($id)
+    {
+        $job = JobApplication::where('id', $id)
+            ->where('user_id', Auth::user()->id)
+            ->firstOrFail();
+
+        $job->delete();
+
+        return redirect()->route('account.myJobApplications')
+            ->with('success', 'Job application deleted successfully.');
     }
 }
