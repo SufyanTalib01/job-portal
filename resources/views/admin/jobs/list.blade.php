@@ -36,6 +36,7 @@
                                         <tr>
                                             <th scope="col">ID</th>
                                             <th scope="col">Title</th>
+                                            <th scope="col">Applications</th>
                                             <th scope="col">Created By</th>
                                             <th scope="col">Created at</th>
                                             <th scope="col">Action</th>
@@ -48,6 +49,7 @@
                                                     <div class="job-name fw-500">{{ $loop->iteration }}</div>
                                                 </td>
                                                 <td>{{ $job->title }}</td>
+                                                <td>{{ $job->applications->count() }}</td>
                                                 <td>{{ $job->user->name ?? 'N/A' }}</td>
                                                 <td>{{ $job->created_at->format('Y-m-d H:i:s') }}</td>
 
@@ -60,7 +62,7 @@
                                                         <ul class="dropdown-menu dropdown-menu-end">
 
                                                             <li><a class="dropdown-item"
-                                                                    href="{{ route('admin.useredit', $job->id) }}"><i
+                                                                    href="{{ route('admin.jobedit', $job->id) }}"><i
                                                                         class="fa fa-edit" aria-hidden="true"></i> Edit</a>
                                                             </li>
                                                             <li>
@@ -84,7 +86,7 @@
                                 </table>
                             </div>
                             <div>
-                                {{ $users->links('pagination::bootstrap-5') }}
+                                {{ $jobs->links('pagination::bootstrap-5') }}
                             </div>
                         </div>
                     </div>

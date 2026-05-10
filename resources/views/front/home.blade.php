@@ -84,39 +84,49 @@
                 <div class="row pt-5">
                     <div class="job_listing_area">
                         <div class="job_lists">
-                            <div class="row">
+                            <div class="row g-4">
                                 @foreach ($isfeaturedjobs as $job)
-                                    <div class="col-md-4">
-                                        <div class="card border-0 p-3 shadow mb-4">
-                                            <div class="card-body">
-                                                <h3 class="border-0 fs-5 pb-2 mb-0">{{ $job->title }}</h3>
-                                                <p>{{ Str::words(strip_tags($job->description), 10, '...') }}</p>
-                                                <div class="bg-light p-3 border">
+                                    <div class="col-md-4 d-flex">
+                                        <div class="card border-0 p-3 shadow mb-4 w-100 h-100">
+                                            <div class="card-body d-flex flex-column">
+
+                                                <h3 class="border-0 fs-5 pb-2 mb-0 text-truncate">
+                                                    {{ $job->title }}
+                                                </h3>
+
+                                                <p>
+                                                    {{ Str::words(strip_tags($job->description), 10, '...') }}
+                                                </p>
+
+                                                <div
+                                                    class="bg-light p-3 border flex-grow-1 d-flex flex-column justify-content-center">
                                                     <p class="mb-0">
                                                         <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
                                                         <span class="ps-1">{{ $job->location }}</span>
                                                     </p>
+
                                                     <p class="mb-0">
                                                         <span class="fw-bolder"><i class="fa fa-clock-o"></i></span>
                                                         <span class="ps-1">{{ $job->jobType->name }}</span>
                                                     </p>
-                                                    @if (!empty($job->salary))
-                                                        <p class="mb-0">
-                                                            <span class="fw-bolder"><i class="fa fa-usd"></i></span>
-                                                            <span class="ps-1">{{ $job->salary }}</span>
-                                                        </p>
-                                                    @endif
+
+
+                                                    <p class="mb-0">
+                                                        <span class="fw-bolder"><i class="fa fa-usd"></i></span>
+                                                        <span class="ps-1">{{ $job->salary ?? 'Not Specified' }}</span>
+                                                    </p>
+
                                                 </div>
 
                                                 <div class="d-grid mt-3">
                                                     <a href="{{ route('jobDetails', $job->id) }}"
                                                         class="btn btn-primary btn-lg">Details</a>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
-
 
 
                             </div>

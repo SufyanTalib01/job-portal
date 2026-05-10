@@ -16,7 +16,7 @@ class HomeController extends Controller
             ->orderBy('name', 'asc')
             ->take(8)
             ->get();
-        $data['isfeaturedjobs'] = Job::with('jobType')->where('is_featured', 1)->orderBy('created_at', 'desc')->take(6)->get();
+        $data['isfeaturedjobs'] = Job::with('jobType')->where('is_featured', 1)->where('status', 1)->orderBy('created_at', 'desc')->take(6)->get();
         $data['latestjobs'] = Job::with('jobType')->orderBy('created_at', 'desc')->take(6)->get();
         return view('front.home', $data);
     }
