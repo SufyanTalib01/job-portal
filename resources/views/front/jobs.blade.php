@@ -143,7 +143,7 @@
                                                                 </h3>
 
                                                                 <p>
-                                                                    {{ Str::words($job->description, 10, '...') }}
+                                                                    {{ Str::words(strip_tags($job->description), 10, '...') }}
                                                                 </p>
 
                                                                 <div

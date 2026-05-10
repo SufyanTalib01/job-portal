@@ -12,6 +12,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
+        integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
 </head>
@@ -86,7 +89,9 @@
     <script src="{{ asset('assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
     <script src="{{ asset('assets/js/instantpages.5.1.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+
 
     <script>
         $.ajaxSetup({
@@ -95,8 +100,9 @@
             }
         });
     </script>
-
     <script>
+        $('.textarea').trumbowyg();
+
         $('#updateProfilePicture').submit(function(e) {
             e.preventDefault();
 

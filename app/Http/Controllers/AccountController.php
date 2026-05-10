@@ -502,4 +502,45 @@ class AccountController extends Controller
         return redirect()->route('account.mySavedJobs')
             ->with('success', 'Saved job deleted successfully.');
     }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required|string|min:5',
+            'new_password' => 'required|string|min:5',
+            'confirm_password' => 'required|string|min:5|same:new_password',
+        ]);
+
+        if ($validator->passes()) {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            // Check if old password is correct
+            if (!Hash::check($request->old_password, $user->password)) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => ['old_password' => 'Old password is incorrect.'],
+                    'message' => 'Old password is incorrect.'
+                ]);
+            }
+
+            // Update password
+            $user->password = Hash::make($request->new_password);
+
+            $user->save();
+
+            Session::flash('success', 'Password updated successfully.');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Password updated successfully.',
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
 }

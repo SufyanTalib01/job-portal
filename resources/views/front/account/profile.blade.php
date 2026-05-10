@@ -60,7 +60,7 @@
                         </form>
                     </div>
 
-                    {{-- <div class="card border-0 shadow mb-4">
+                    <div class="card border-0 shadow mb-4">
                         <form action="{{ route('account.updatePassword') }}" method="post" name="changePasswordForm"
                             id="changePasswordForm">
                             @csrf
@@ -89,7 +89,7 @@
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -155,4 +155,52 @@
                 },
             });
         })
-    @endsection
+    </script>
+
+    <script>
+        $('#changePasswordForm').submit(function(e) {
+            e.preventDefault();
+
+            $('.form-control').removeClass('is-invalid');
+            $('.text-danger').html('');
+
+            $.ajax({
+                url: '{{ route('account.updatePassword') }}',
+                type: 'POST',
+                data: $('#changePasswordForm').serialize(),
+                dataType: 'json',
+
+                success: function(response) {
+                    if (response.status == true) {
+                        window.location.href = '{{ route('account.profile') }}';
+                    }
+
+                    if (response.status == false) {
+                        errors = response.errors;
+                        if (errors.old_password) {
+                            $('#old_password')
+                                .addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.old_password);
+                        }
+                        if (errors.new_password) {
+                            $('#new_password')
+                                .addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.new_password);
+                        }
+                        if (errors.confirm_password) {
+                            $('#confirm_password')
+                                .addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.confirm_password);
+                        }
+                    }
+                }
+            })
+        });
+    </script>
+@endsection
