@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JobController;
+use App\Http\Controllers\admin\JobController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -11,6 +13,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
 Route::get('/job/details/{id}', [JobController::class, 'jobDetails'])->name('jobDetails');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'checkAdmin'], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users');
+    Route::get('/user/{id}', [UserController::class, 'edit'])->name('admin.useredit');
+    Route::put('/user/{id}', [UserController::class, 'update'])->name('admin.userupdate');
+    Route::delete('/user/{id}', [UserController::class, 'delete'])->name('admin.userdelete');
+    Route::get('/jobs', [JobController::class, 'index'])->name('admin.jobs');
+});
 
 
 

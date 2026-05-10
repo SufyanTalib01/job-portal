@@ -38,6 +38,10 @@
                             <a class="nav-link" aria-current="page" href="{{ route('jobs') }}">Find Jobs</a>
                         </li>
                     </ul>
+                    @if (Auth::check() && Auth::user()->role == 'admin')
+                        <a class="btn btn-outline-primary me-2" href="{{ route('admin.dashboard') }}"
+                            type="submit">Admin Panel</a>
+                    @endif
                     @if (Auth::user())
                         <a class="btn btn-outline-primary me-2" href="{{ route('account.profile') }}"
                             type="submit">Profile</a>

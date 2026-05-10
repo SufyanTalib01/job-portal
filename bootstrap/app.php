@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'newUserAuth' => App\Http\Middleware\NewUserAuth::class,
             'oldUserAuth' => App\Http\Middleware\OldUserAuth::class,
+            'checkAdmin' => App\Http\Middleware\CheckAdmin::class,
 
         ]);
     })
